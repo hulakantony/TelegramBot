@@ -17,7 +17,9 @@ module.exports = (bot, chatId) => {
   });
   conn.on('ready', function() {
     const date = new Date().getTime();
+
     console.log('[INFO]:  Client ready');
+
     conn.exec(`${sshMakePhotoCommand} "${date}"`, function(err, stream) {
       if (err) {
         bot.sendMessage(chatId, 'Unable to connect to raspberry', {
@@ -29,7 +31,9 @@ module.exports = (bot, chatId) => {
         return;
       }
       stream.on('close', function(code, signal) {
+
         console.log('[INFO]  Stream close');
+
         conn.end();
       }).on('data', async (response) => {
         if (response.toString().trim() !== 'Done') {
@@ -40,7 +44,7 @@ module.exports = (bot, chatId) => {
           data = await gets3Object(`${date}`);
         } catch (err) {
           console.log(err);
-          bot.sendMessage(chatId, 'Something wrong with getting imase from S3', {
+          bot.sendMessage(chatId, 'Something wrong with getting imase from S3' + err.message, {
             "reply_markup": {
               "keyboard": [['Make photo', 'Show last five messages', 'Show last five photos']],
               "one_time_keyboard": true,
