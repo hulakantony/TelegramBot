@@ -1,6 +1,6 @@
 const makePhoto = require('./makePhoto');
 const getMessages = require('./getMessages');
-const myID = parseInt(require('../../../config/telegram').myId);
+const { myIds } = require('../../../config/telegram');
 const bot = require('../../../instances/bot');
 const { saveUserMessage } = require('../../database/messages');
 const getImages = require('./getImages');
@@ -14,7 +14,7 @@ module.exports = () => {
     if (msg.text[0] === '/') {
       return;
     }
-    if (authorId !== myID) {
+    if (!myIds.includes(authorId)) {
       bot.sendMessage(chatId, 'You are not allowed!');
       return;
     }
